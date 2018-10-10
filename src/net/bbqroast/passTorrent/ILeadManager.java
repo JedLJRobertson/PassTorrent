@@ -4,5 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public interface ILeadManager {
-    ArrayList<Peer> getPeers() throws IOException;
+    void getPeers(ITorrent manager) throws IOException;
+    void register(int port);
 }

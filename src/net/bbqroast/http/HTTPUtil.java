@@ -23,6 +23,6 @@ public class HTTPUtil {
             result.append(line);
         }
         rd.close();
-        return rd.toString();
+        return result.toString();
     }
 }
