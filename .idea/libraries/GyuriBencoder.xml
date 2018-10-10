@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="GyuriBencoder">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../GyuriBencoder.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
