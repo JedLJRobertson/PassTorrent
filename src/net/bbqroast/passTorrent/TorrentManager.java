@@ -5,14 +5,28 @@ import com.dosse.upnp.UPnP;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class TorrentManager implements ITorrent {
     private ILeadManager leadManager;
     private ServerSocket socket;
+    private ArrayList<Peer> peers;
 
     public TorrentManager(ILeadManager leadManager, int port) {
         this.leadManager = leadManager;
 
+        Logger.getInstance().log("Getting peers...");
+        try {
+            peers = leadManager.getPeers();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        for (Peer peer : peers) {
+            Logger.getInstance().log(peer.toString());
+        }
+
+        // Launch listening socket
         try {
             socket = new ServerSocket(port);
         } catch (IOException e) {
@@ -25,10 +39,10 @@ public class TorrentManager implements ITorrent {
                 for (;;) {
                     try {
                         Socket s = socket.accept(); //wait for connections on socket
-                        System.out.println("Incoming connection from " + s.getInetAddress().getHostAddress()); //print remote machine IP
+                        Logger.getInstance().log("Incoming connection from " + s.getInetAddress().getHostAddress()); //print remote machine IP
                         s.close(); //close the connection
                     } catch (Throwable t) {
-                        System.err.println("Network error: "+t);
+                        Logger.getInstance().logErr("Network error: "+t);
                     }
                 }
             }
@@ -36,14 +50,14 @@ public class TorrentManager implements ITorrent {
 
         if (UPnP.isUPnPAvailable()) { //is UPnP available?
             if (UPnP.isMappedTCP(port)) { //is the port already mapped?
-                System.out.println("UPnP port forwarding not enabled: port is already mapped");
+                Logger.getInstance().log("UPnP port forwarding not enabled: port is already mapped");
             } else if (UPnP.openPortTCP(port)) { //try to map port
-                System.out.println("UPnP port forwarding enabled");
+                Logger.getInstance().log("UPnP port forwarding enabled");
             } else {
-                System.out.println("UPnP port forwarding failed");
+                Logger.getInstance().log("UPnP port forwarding failed");
             }
         } else {
-            System.out.println("UPnP is not available");
+            Logger.getInstance().log("UPnP is not available");
         }
     }
 }

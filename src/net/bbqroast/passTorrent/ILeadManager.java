@@ -1,5 +1,8 @@
 package net.bbqroast.passTorrent;
 
-public interface ILeadManager {
+import java.io.IOException;
+import java.util.ArrayList;
 
+public interface ILeadManager {
+    ArrayList<Peer> getPeers() throws IOException;
 }
